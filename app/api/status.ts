@@ -14,6 +14,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(200).json({ javaStatus, bedrockStatus });
   } catch (error) {
     console.error('Error fetching server status:', error);
-    res.status(500).json({ error: 'Unable to fetch server status', details: error.message });
+    res.status(500).json({ error: 'Unable to fetch server status'});
   }
 }

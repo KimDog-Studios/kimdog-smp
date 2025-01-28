@@ -20,7 +20,7 @@ const Navigation: React.FC = () => {
                         <Link href="/" className="text-white hover:text-gray-400 transition-colors duration-300">Home</Link>
                     </li>
                     <li>
-                        <Link href="/about" className="text-white hover:text-gray-400 transition-colors duration-300">About</Link>
+                        <Link href="/whitelisting" className="text-white hover:text-gray-400 transition-colors duration-300">Whitelisting</Link>
                     </li>
                     <li>
                         <Link href="/servers" className="text-white hover:text-gray-400 transition-colors duration-300">Servers</Link>

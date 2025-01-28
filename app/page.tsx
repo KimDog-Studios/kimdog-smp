@@ -42,7 +42,7 @@ export default function Home() {
   return (
     <div className="bg-gray-900 text-white min-h-screen font-minecraft">
       <Navigation />
-      <header className="text-center py-20 bg-cover bg-center" style={{ backgroundImage: "url('/images/header-bg.webp')" }}>
+      <header className="text-center py-20 bg-cover bg-center">
         <h1 className="text-5xl mb-4 animate-fadeIn">Welcome to KimDog SMP</h1>
         <p className="text-xl mb-8 animate-fadeIn delay-1s">Join our Minecraft Survival Multiplayer Server and embark on an epic adventure!</p>
         <Link href="/servers">
