@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import Navigation from '../components/Navigation';
 import videos from '../config/videos';
@@ -7,6 +7,35 @@ import staffMembers from '../config/staffTeam';
 import EditIcon from '@mui/icons-material/Edit';
 
 export default function Home() {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus(null);
+
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setStatus({ type: 'success', message: result.message });
+        setEmail('');
+      } else {
+        setStatus({ type: 'error', message: result.message });
+      }
+    } catch (error) {
+      setStatus({ type: 'error', message: 'Failed to subscribe to the newsletter' });
+    }
+  };
+
   return (
     <div className="bg-gray-900 text-white min-h-screen font-minecraft">
       <Navigation />
@@ -110,7 +139,30 @@ export default function Home() {
             ))}
           </div>
         </section>
+
+        <section className="my-12 text-center">
+          <h2 className="text-3xl mb-4 border-b-2 border-green-500 pb-2">Newsletter Signup</h2>
+          <form className="max-w-2xl mx-auto" onSubmit={handleSubmit}>
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="w-full p-4 text-lg rounded bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 mb-4"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <button type="submit" className="bg-green-500 hover:bg-green-700 text-white py-3 px-6 rounded transition duration-300 transform hover:scale-105 text-lg">
+              Sign Up
+            </button>
+          </form>
+          {status && (
+            <div className={`mt-4 text-lg ${status.type === 'success' ? 'text-green-500' : 'text-red-500'}`}>
+              {status.message}
+            </div>
+          )}
+        </section>
       </main>
+
       <footer className="text-center py-4 border-t border-gray-700">
         <p>&copy; 2025 KimDog SMP. All rights reserved.</p>
         <a href="https://github.com/KimDog-Studios/kimdog-smp" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline flex items-center justify-center">
