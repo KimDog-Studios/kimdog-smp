@@ -2,6 +2,7 @@
 import React, { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Navigation from '../../components/Navigation';
 
 const AuthContent: React.FC = () => {
   const searchParams = useSearchParams();
@@ -61,98 +62,101 @@ const AuthContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
-      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl mb-4">{mode === 'signup' ? 'Sign Up' : 'Login'}</h2>
-        <form onSubmit={handleSubmit}>
-          {mode === 'signup' && (
-            <>
+    <div className="min-h-screen flex flex-col bg-gray-900 text-white">
+      <Navigation />
+      <div className="flex flex-col items-center justify-center flex-grow">
+        <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md mt-8">
+          <h2 className="text-2xl mb-4">{mode === 'signup' ? 'Sign Up' : 'Login'}</h2>
+          <form onSubmit={handleSubmit}>
+            {mode === 'signup' && (
+              <>
+                <div className="mb-4">
+                  <label htmlFor="username" className="block text-sm font-medium">Username</label>
+                  <input
+                    type="text"
+                    id="username"
+                    className="w-full p-2 mt-1 rounded bg-gray-700 text-white"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="email" className="block text-sm font-medium">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    className="w-full p-2 mt-1 rounded bg-gray-700 text-white"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+              </>
+            )}
+            {mode === 'login' && (
               <div className="mb-4">
-                <label htmlFor="username" className="block text-sm font-medium">Username</label>
+                <label htmlFor="identifier" className="block text-sm font-medium">Username or Email</label>
                 <input
                   type="text"
-                  id="username"
+                  id="identifier"
                   className="w-full p-2 mt-1 rounded bg-gray-700 text-white"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  value={identifier}
+                  onChange={(e) => setIdentifier(e.target.value)}
                   required
                 />
               </div>
-              <div className="mb-4">
-                <label htmlFor="email" className="block text-sm font-medium">Email</label>
+            )}
+            <div className="mb-4">
+              <label htmlFor="password" className="block text-sm font-medium">Password</label>
+              <div className="relative">
                 <input
-                  type="email"
-                  id="email"
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
                   className="w-full p-2 mt-1 rounded bg-gray-700 text-white"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 px-3 py-2 text-gray-400"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? 'Hide' : 'Show'}
+                </button>
+              </div>
+            </div>
+            {mode === 'signup' && (
+              <div className="mb-4">
+                <label htmlFor="confirmPassword" className="block text-sm font-medium">Confirm Password</label>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="confirmPassword"
+                  className="w-full p-2 mt-1 rounded bg-gray-700 text-white"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                 />
               </div>
-            </>
-          )}
-          {mode === 'login' && (
-            <div className="mb-4">
-              <label htmlFor="identifier" className="block text-sm font-medium">Username or Email</label>
-              <input
-                type="text"
-                id="identifier"
-                className="w-full p-2 mt-1 rounded bg-gray-700 text-white"
-                value={identifier}
-                onChange={(e) => setIdentifier(e.target.value)}
-                required
-              />
-            </div>
-          )}
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-medium">Password</label>
-            <div className="relative">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                id="password"
-                className="w-full p-2 mt-1 rounded bg-gray-700 text-white"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <button
-                type="button"
-                className="absolute inset-y-0 right-0 px-3 py-2 text-gray-400"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? 'Hide' : 'Show'}
-              </button>
-            </div>
-          </div>
-          {mode === 'signup' && (
-            <div className="mb-4">
-              <label htmlFor="confirmPassword" className="block text-sm font-medium">Confirm Password</label>
-              <input
-                type={showPassword ? 'text' : 'password'}
-                id="confirmPassword"
-                className="w-full p-2 mt-1 rounded bg-gray-700 text-white"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-            </div>
-          )}
-          <button type="submit" className="w-full bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded transition duration-300">
-            {mode === 'signup' ? 'Sign Up' : 'Login'}
-          </button>
-        </form>
-        {message && <p className="mt-4 text-sm text-red-500">{message}</p>}
-        <p className="mt-4 text-sm">
-          {mode === 'signup' ? (
-            <>
-              Already have an account? <Link href="/auth?mode=login" className="text-blue-500 hover:underline">Login</Link>
-            </>
-          ) : (
-            <>
-              Don't have an account? <Link href="/auth?mode=signup" className="text-blue-500 hover:underline">Sign Up</Link>
-            </>
-          )}
-        </p>
+            )}
+            <button type="submit" className="w-full bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded transition duration-300">
+              {mode === 'signup' ? 'Sign Up' : 'Login'}
+            </button>
+          </form>
+          {message && <p className="mt-4 text-sm text-red-500">{message}</p>}
+          <p className="mt-4 text-sm">
+            {mode === 'signup' ? (
+              <>
+                Already have an account? <Link href="/auth?mode=login" className="text-blue-500 hover:underline">Login</Link>
+              </>
+            ) : (
+              <>
+                Don't have an account? <Link href="/auth?mode=signup" className="text-blue-500 hover:underline">Sign Up</Link>
+              </>
+            )}
+          </p>
+        </div>
       </div>
     </div>
   );

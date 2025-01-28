@@ -13,7 +13,7 @@ export default {
         foreground: "var(--foreground)",
       },
       fontFamily: {
-        minecraft: ['Minecraft', 'sans-serif'],
+        minecraft: ['SuperBakery', 'sans-serif'],
       },
     },
   },
