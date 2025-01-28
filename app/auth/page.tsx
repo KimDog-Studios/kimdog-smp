@@ -1,9 +1,9 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-const Auth: React.FC = () => {
+const AuthContent: React.FC = () => {
   const searchParams = useSearchParams();
   const mode = searchParams ? searchParams.get('mode') : null;
   const [identifier, setIdentifier] = useState(''); // This will be used for both username and email
@@ -155,6 +155,14 @@ const Auth: React.FC = () => {
         </p>
       </div>
     </div>
+  );
+};
+
+const Auth: React.FC = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AuthContent />
+    </Suspense>
   );
 };
 
