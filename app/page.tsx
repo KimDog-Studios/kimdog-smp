@@ -67,6 +67,12 @@ export default function Home() {
             </button>
           </a>
         </div>
+      <div className="mt-8">
+        <h2 className="text-3xl mb-4">Current Players Online</h2>
+        <div>
+          <p className="text-lg">Fetching player count...</p>
+        </div>
+      </div>
       </header>
 
       <main className="px-4">
