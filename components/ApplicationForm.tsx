@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
@@ -45,9 +46,8 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({ title, fields, apiEnd
     <section className="w-full max-w-md">
       <h2 className="text-3xl mb-4">{title}</h2>
       <form onSubmit={handleSubmit}>
-        {fields.map((field) => (
-          <div className="mb-4" key={field.id}>
-            <label className="block text-lg mb-2" htmlFor={field.id}>{field.label}</label>
+        {fields && fields.map((field) => (
+          <div key={field.id} className="mb-6">
             {field.type === 'textarea' ? (
               <textarea
                 id={field.id}

@@ -11,6 +11,7 @@ const ApplicationsPage: React.FC = () => {
     { id: 'name', label: 'Name', type: 'text', placeholder: 'Your Name', required: true },
     { id: 'email', label: 'Email', type: 'email', placeholder: 'Your Email', required: true },
     { id: 'minecraftUsername', label: 'Minecraft Username', type: 'text', placeholder: 'Your Minecraft Username', required: true },
+    { id: 'uuid', label: 'Minecraft UUID', type: 'text', placeholder: 'Minecraft UUID', required: true },
     { id: 'reason', label: 'Reason for Joining', type: 'textarea', placeholder: 'Why do you want to join?', required: true },
   ];
 
@@ -18,6 +19,7 @@ const ApplicationsPage: React.FC = () => {
     { id: 'name', label: 'Name', type: 'text', placeholder: 'Your Name', required: true },
     { id: 'email', label: 'Email', type: 'email', placeholder: 'Your Email', required: true },
     { id: 'minecraftUsername', label: 'Minecraft Username', type: 'text', placeholder: 'Your Minecraft Username', required: true },
+    { id: 'uuid', label: 'Minecraft UUID', type: 'text', placeholder: 'Minecraft UUID', required: true },
     { id: 'discordName', label: 'Discord Name', type: 'text', placeholder: 'Your Discord Name', required: true },
     { id: 'experience', label: 'Experience', type: 'textarea', placeholder: 'Describe your experience as an admin', required: true },
     { id: 'reason', label: 'Reason for Applying', type: 'textarea', placeholder: 'Why do you want to be an admin?', required: true },
