@@ -108,6 +108,7 @@ export default function Home() {
         </section>
         <section className="my-12 text-center">
           <h2 className="text-3xl mb-4 border-b-2 border-green-500 pb-2">Gallery</h2>
+          <h3 className="text-2xl mb-4">YouTube</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {videos.map((video) => (
               <div key={video.id} className="rounded shadow-lg transform hover:scale-105 transition duration-300">
@@ -121,6 +122,39 @@ export default function Home() {
                   allowFullScreen
                   className="rounded"
                 ></iframe>
+              </div>
+            ))}
+          </div>
+          <h3 className="text-2xl mt-8 mb-4">Twitch</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="rounded shadow-lg transform hover:scale-105 transition duration-300">
+              <iframe
+                src="https://player.twitch.tv/?channel=kimdog420&parent=kimdog-smp.com"
+                height="315"
+                width="100%"
+                allowFullScreen
+                className="rounded"
+              ></iframe>
+            </div>
+            <div className="rounded shadow-lg transform hover:scale-105 transition duration-300">
+              <iframe
+                src="https://player.twitch.tv/?channel=theyeetchannel_ttv&parent=kimdog-smp.com"
+                height="315"
+                width="100%"
+                allowFullScreen
+                className="rounded"
+              ></iframe>
+            </div>
+          </div>
+          <h3 className="text-2xl mt-8 mb-4">Screenshots</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {screenshots.map((screenshot, index) => (
+              <div key={index} className="rounded shadow-lg transform hover:scale-105 transition duration-300">
+                <img
+                  src={`https://raw.githubusercontent.com/yourusername/yourrepository/main/screenshots/${screenshot}`}
+                  alt={`Screenshot ${index + 1}`}
+                  className="w-full h-auto rounded"
+                />
               </div>
             ))}
           </div>
