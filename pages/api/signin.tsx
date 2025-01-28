@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Find the user by email or username
-    const user = users.find(user => user.email === identifier || user.username === identifier);
+    const user = users.find((user: { email: string; username: string; password: string; id: string }) => user.email === identifier || user.username === identifier);
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
