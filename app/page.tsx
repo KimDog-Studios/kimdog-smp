@@ -3,62 +3,30 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Navigation from '../components/Navigation';
 import videos from '../config/videos';
+import staffMembers from '../config/staffTeam';
 
 export default function Home() {
-  interface ServerStatus {
-    javaStatus: {
-      players: {
-        online: number;
-        max: number;
-      };
-    } | null;
-    bedrockStatus: {
-      players: {
-        online: number;
-        max: number;
-      };
-    } | null;
-  }
-
-  const [serverStatus, setServerStatus] = useState<ServerStatus>({ javaStatus: null, bedrockStatus: null });
-
-  useEffect(() => {
-    async function fetchServerStatus() {
-      try {
-        const response = await fetch('/api/status');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setServerStatus(data);
-      } catch (error) {
-        console.error('Error fetching server status:', error);
-      }
-    }
-
-    fetchServerStatus();
-  }, []);
-
   return (
     <div className="bg-gray-900 text-white min-h-screen font-minecraft">
       <Navigation />
+
       <header className="text-center py-20 bg-cover bg-center">
         <h1 className="text-5xl mb-4 animate-fadeIn">Welcome to KimDog SMP</h1>
         <p className="text-xl mb-8 animate-fadeIn delay-1s">Join our Minecraft Survival Multiplayer Server and embark on an epic adventure!</p>
-        <Link href="/servers">
-          <button className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded transition duration-300 transform hover:scale-105">
-            Join Now
-          </button>
-        </Link>
-        {serverStatus.javaStatus && serverStatus.bedrockStatus && (
-          <div className="mt-8">
-            <p className="text-lg">Java Server IP: play.kimdog-smp.com</p>
-            <p className="text-lg">Java Players Online: {serverStatus.javaStatus.players.online}/{serverStatus.javaStatus.players.max}</p>
-            <p className="text-lg mt-4">Bedrock Server IP: play.kimdog-smp.com</p>
-            <p className="text-lg">Bedrock Players Online: {serverStatus.bedrockStatus.players.online}/{serverStatus.bedrockStatus.players.max}</p>
-          </div>
-        )}
+        <div className="flex justify-center space-x-4">
+          <Link href="/applications">
+            <button className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded transition duration-300 transform hover:scale-105">
+              Apply Now
+            </button>
+          </Link>
+          <a href="https://discord.gg/qqkESddDgc" target="_blank" rel="noopener noreferrer">
+            <button className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded transition duration-300 transform hover:scale-105">
+              Join Discord
+            </button>
+          </a>
+        </div>
       </header>
+
       <main className="px-4">
         <section className="my-12 text-center">
           <h2 className="text-3xl mb-4 border-b-2 border-green-500 pb-2">About Our Server</h2>
@@ -93,6 +61,18 @@ export default function Home() {
               <h3 className="text-2xl mb-2">Whitelisted</h3>
               <p className="text-lg">Join an exclusive and dedicated player base.</p>
             </div>
+            <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+              <h3 className="text-2xl mb-2">Crate System</h3>
+              <p className="text-lg">Use your Keys to get Rewards.</p>
+            </div>
+            <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+              <h3 className="text-2xl mb-2">Java Edition</h3>
+              <p className="text-lg">1.21.4</p>
+            </div>
+            <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+              <h3 className="text-2xl mb-2">Bedrock Edition</h3>
+              <p className="text-lg">1.21.4</p>
+            </div>
           </div>
         </section>
         <section className="my-12 text-center">
@@ -110,6 +90,21 @@ export default function Home() {
                   allowFullScreen
                   className="rounded"
                 ></iframe>
+              </div>
+            ))}
+          </div>
+        </section>
+        <section className="my-12 text-center">
+          <h2 className="text-3xl mb-4 border-b-2 border-green-500 pb-2">Staff Team</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {staffMembers.map((member) => (
+              <div
+                key={member.id}
+                className="rounded shadow-lg transform hover:scale-105 transition duration-300 bg-gray-800 p-6"
+              >
+                <img src={`https://crafatar.com/avatars/${member.uuid}?size=100&overlay=true`} alt={member.name} className="w-24 h-24 rounded-full mx-auto mb-4" />
+                <h3 className="text-2xl mb-2">{member.name}</h3>
+                <p className={`text-lg ${member.role === 'Owner' ? 'text-red-500' : member.role === 'Co-Owner' ? 'text-green-500' : ''}`}>{member.role}</p>
               </div>
             ))}
           </div>

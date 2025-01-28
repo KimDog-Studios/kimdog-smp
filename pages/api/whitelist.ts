@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(500).json({ message: 'Failed to send application.' });
       }
     } catch (error) {
-      res.status(500).json({ message: 'Failed to send application.'});
+      res.status(500).json({ message: 'Failed to send application.', error: error.message });
     }
   } else {
     res.status(405).json({ message: 'Method not allowed' });

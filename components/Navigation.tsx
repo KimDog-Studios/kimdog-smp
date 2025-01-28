@@ -8,14 +8,7 @@ const Navigation: React.FC = () => {
                 <div className="text-white text-2xl">
                     <Link href="/">KimDog's SMP</Link>
                 </div>
-                <div className="flex-grow mx-4">
-                    <input
-                        type="text"
-                        placeholder="Search..."
-                        className="w-full p-2 rounded bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
-                    />
-                </div>
-                <ul className="flex space-x-6">
+                <ul className="flex space-x-6 ml-auto">
                     <li>
                         <Link href="/" className="text-white hover:text-gray-400 transition-colors duration-300">Home</Link>
                     </li>

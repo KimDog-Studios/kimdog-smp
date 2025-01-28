@@ -31,8 +31,12 @@ const ApplicationsPage: React.FC = () => {
           <p className="text-xl">Please fill out the form below to apply for the whitelist or an admin position.</p>
         </header>
         <div className="flex flex-wrap justify-center gap-8 w-full max-w-6xl">
-          <ApplicationForm title="Whitelist Application" fields={whitelistFields} apiEndpoint="/api/application" type="whitelist" />
-          <ApplicationForm title="Admin Application" fields={adminFields} apiEndpoint="/api/application" type="admin" />
+          <div className="w-full md:w-1/2 flex justify-center">
+            <ApplicationForm title="Whitelist Application" fields={whitelistFields} apiEndpoint="/api/application" type="whitelist" />
+          </div>
+          <div className="w-full md:w-1/2 flex justify-center">
+            <ApplicationForm title="Admin Application" fields={adminFields} apiEndpoint="/api/application" type="admin" />
+          </div>
         </div>
       </main>
     </div>
