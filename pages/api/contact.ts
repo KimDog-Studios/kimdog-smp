@@ -5,6 +5,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'POST') {
     const { name, email, message } = req.body;
 
+    console.log('Received request:', { name, email, message });
+
+    // Check if environment variables are set
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error('Missing environment variables for email configuration');
+      return res.status(500).json({ message: 'Server configuration error' });
+    }
+
+    console.log('Environment variables:', {
+      EMAIL_USER: process.env.EMAIL_USER,
+      EMAIL_PASS: process.env.EMAIL_PASS ? '******' : 'not set',
+    });
+
     // Configure the transporter
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -24,10 +37,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
       // Send the email
-      await transporter.sendMail(mailOptions);
+      const info = await transporter.sendMail(mailOptions);
+      console.log('Email sent successfully:', info);
       res.status(200).json({ message: 'Email sent successfully' });
     } catch (error) {
-      res.status(500).json({ message: 'Error sending email', error });
+      console.error('Error sending email:', error);
+      res.status(500).json({ message: 'Error sending email', error});
     }
   } else {
     res.status(405).json({ message: 'Method not allowed' });
