@@ -5,7 +5,18 @@ dotenv.config();
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['raw.githubusercontent.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'raw.githubusercontent.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'crafatar.com',
+        pathname: '/avatars/**',
+      },
+    ],
   },
   env: {
     EMAIL_USER: process.env.EMAIL_USER,

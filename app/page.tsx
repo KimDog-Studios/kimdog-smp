@@ -5,6 +5,7 @@ import Navigation from '../components/Navigation';
 import videos from '../config/videos';
 import staffMembers from '../config/staffTeam';
 import EditIcon from '@mui/icons-material/Edit';
+import Image from 'next/image';
 
 export default function Home() {
   const [email, setEmail] = useState('');
@@ -132,7 +133,7 @@ export default function Home() {
                 key={member.id}
                 className="rounded shadow-lg transform hover:scale-105 transition duration-300 bg-gray-800 p-6"
               >
-                <img src={`https://crafatar.com/avatars/${member.uuid}?size=100&overlay=true`} alt={member.name} className="w-24 h-24 rounded-full mx-auto mb-4" />
+                <Image src={`https://crafatar.com/avatars/${member.uuid}?size=100&overlay=true`} alt={member.name} width={100} height={100} className="w-24 h-24 rounded-full mx-auto mb-4" />
                 <h3 className="text-2xl mb-2">{member.name}</h3>
                 <p className={`text-lg ${member.role === 'Owner' ? 'text-red-500' : member.role === 'Co-Owner' ? 'text-green-500' : ''}`}>{member.role}</p>
               </div>
