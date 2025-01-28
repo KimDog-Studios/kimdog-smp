@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navigation from '../components/Navigation';
 import videos from '../config/videos';
@@ -10,6 +10,17 @@ import Image from 'next/image';
 export default function Home() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [screenshots, setScreenshots] = useState([]);
+
+  useEffect(() => {
+    fetch('https://api.github.com/repos/KimDog-Studios/kimdog-smp/contents/public/assets/Screenshots')
+      .then(response => response.json())
+      .then(data => {
+        const screenshotFiles = data.map((file: { name: string }) => file.name);
+        setScreenshots(screenshotFiles);
+      })
+      .catch(error => console.error('Error fetching screenshots:', error));
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -151,7 +162,7 @@ export default function Home() {
             {screenshots.map((screenshot, index) => (
               <div key={index} className="rounded shadow-lg transform hover:scale-105 transition duration-300">
                 <img
-                  src={`https://raw.githubusercontent.com/yourusername/yourrepository/main/screenshots/${screenshot}`}
+                  src={`https://raw.githubusercontent.com/KimDog-Studios/kimdog-smp/main/public/assets/Screenshots/${screenshot}`}
                   alt={`Screenshot ${index + 1}`}
                   className="w-full h-auto rounded"
                 />
