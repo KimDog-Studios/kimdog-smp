@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
 import emailConfig from '../../config/emailConfig';
+import fs from 'fs';
+import path from 'path';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
@@ -9,6 +11,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!email || !email.includes('@')) {
       return res.status(400).json({ message: 'Invalid email address' });
     }
+
+    // Path to the subscribers.json file
+    const filePath = path.resolve(process.cwd(), 'config', 'subscribers.json');
+
+    // Read the existing subscribers
+    let subscribers = [];
+    if (fs.existsSync(filePath)) {
+      subscribers = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    }
+
+    // Check if the email is already subscribed
+    if (subscribers.includes(email)) {
+      return res.status(400).json({ message: 'Email is already subscribed' });
+    }
+
+    // Add the new email to the subscribers list
+    subscribers.push(email);
+
+    // Write the updated subscribers list to the file
+    fs.writeFileSync(filePath, JSON.stringify(subscribers, null, 2));
 
     // Create a Nodemailer transporter using SMTP
     const transporter = nodemailer.createTransport(emailConfig);
