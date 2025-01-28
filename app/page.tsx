@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Navigation from '../components/Navigation';
 import videos from '../config/videos';
 import staffMembers from '../config/staffTeam';
+import EditIcon from '@mui/icons-material/Edit';
 
 export default function Home() {
   return (
@@ -112,6 +113,10 @@ export default function Home() {
       </main>
       <footer className="text-center py-4 border-t border-gray-700">
         <p>&copy; 2025 KimDog SMP. All rights reserved.</p>
+        <a href="https://github.com/KimDog-Studios/kimdog-smp" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline flex items-center justify-center">
+          <EditIcon className="mr-2" />
+          Edit this page on GitHub
+        </a>
       </footer>
     </div>
   );
