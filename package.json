@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@vercel/analytics": "^1.4.1",
     "dotenv": "^16.4.7",
+    "minecraft-server-util": "^5.4.4",
     "next": "15.1.6",
     "nodemailer": "^6.10.0",
     "react": "^19.0.0",
