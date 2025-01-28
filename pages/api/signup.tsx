@@ -20,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Check if the email or username is already taken
-    if (users.some(user => user.email === email || user.username === username)) {
+    if (users.some((user: { email: string; username: string }) => user.email === email || user.username === username)) {
       return res.status(400).json({ message: 'Email or username already taken' });
     }
 
