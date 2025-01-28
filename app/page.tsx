@@ -113,7 +113,7 @@ export default function Home() {
             </div>
             <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
               <h3 className="text-2xl mb-2">Bedrock Edition</h3>
-              <p className="text-lg">1.21.4</p>
+              <p className="text-lg">1.21.51</p>
             </div>
           </div>
         </section>
