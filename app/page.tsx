@@ -1,10 +1,9 @@
-"use client";
+'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navigation from '../components/Navigation';
 import videos from '../config/videos';
 import staffMembers from '../config/staffTeam';
-import EditIcon from '@mui/icons-material/Edit';
 import Image from 'next/image';
 
 export default function Home() {
@@ -67,12 +66,6 @@ export default function Home() {
             </button>
           </a>
         </div>
-      <div className="mt-8">
-        <h2 className="text-3xl mb-4">Current Players Online</h2>
-        <div>
-          <p className="text-lg">Fetching player count...</p>
-        </div>
-      </div>
       </header>
 
       <main className="px-4">
@@ -163,18 +156,6 @@ export default function Home() {
               ></iframe>
             </div>
           </div>
-            {/* <h3 className="text-2xl mt-8 mb-4">Screenshots</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {screenshots.map((screenshot, index) => (
-              <div key={index} className="rounded shadow-lg transform hover:scale-105 transition duration-300">
-              <img
-                src={`https://raw.githubusercontent.com/KimDog-Studios/kimdog-smp/main/public/assets/Screenshots/${screenshot}`}
-                alt={`Screenshot ${index + 1}`}
-                className="w-full h-auto rounded"
-              />
-              </div>
-            ))}
-            </div> */}
         </section>
         <section className="my-12 text-center">
           <h2 className="text-3xl mb-4 border-b-2 border-green-500 pb-2">Server Team</h2>
