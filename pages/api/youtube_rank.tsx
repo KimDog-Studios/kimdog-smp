@@ -57,12 +57,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       });
 
+      console.log('Transporter configured:', transporter);
+
       const mailOptions = {
         from: process.env.GMAIL_USER,
         to: email,
         subject: 'YouTube Rank Application Received',
         text: `Hello ${name},\n\nThank you for applying for the YouTube rank on our server. We have received your application and will review it within 24-48 hours.\n\nBest regards,\nKimDog SMP Team`,
       };
+
+      console.log('Mail options:', mailOptions);
 
       await transporter.sendMail(mailOptions);
 
