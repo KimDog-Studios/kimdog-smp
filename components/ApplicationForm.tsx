@@ -77,6 +77,13 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({ title, fields, apiEnd
         >
           Submit
         </button>
+        <button
+          type="button"
+          onClick={() => window.open('https://mcuuid.net/', '_blank')}
+          className="bg-blue-500 hover:bg-blue-700 text-white py-3 px-6 rounded transition duration-300 transform hover:scale-105 text-lg ml-4"
+        >
+          Get UUID
+        </button>
         {status && (
           <div className="mt-4">
             <Alert severity={status.type}>
