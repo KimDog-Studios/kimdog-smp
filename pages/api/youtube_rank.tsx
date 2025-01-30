@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import nodemailer from 'nodemailer';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
@@ -34,6 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     };
 
     try {
+      // Send application to Discord
       const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
@@ -45,6 +47,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (!response.ok) {
         throw new Error('Failed to send application to Discord');
       }
+
+      // Send confirmation email to the applicant
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.GMAIL_USER,
+          pass: process.env.GMAIL_PASS,
+        },
+      });
+
+      const mailOptions = {
+        from: process.env.GMAIL_USER,
+        to: email,
+        subject: 'YouTube Rank Application Received',
+        text: `Hello ${name},\n\nThank you for applying for the YouTube rank on our server. We have received your application and will review it within 24-48 hours.\n\nBest regards,\nKimDog SMP Team`,
+      };
+
+      await transporter.sendMail(mailOptions);
 
       res.status(200).json({ message: 'Application submitted successfully' });
     } catch (error) {
