@@ -22,7 +22,7 @@ const ServersPage: React.FC = () => {
               <p className="text-lg mb-2">2. Click on "Multiplayer".</p>
               <p className="text-lg mb-2">3. Click on "Add Server".</p>
               <p className="text-lg mb-2">4. Enter the server name: KimDog's SMP</p>
-              <p className="text-lg mb-2">5. Enter the server address: mc.kimdog-smp.com</p>
+              <p className="text-lg mb-2">5. Enter the server address: play.kimdog-smp.com</p>
               <p className="text-lg mb-2">6. Click "Done" and then "Join Server".</p>
             </div>
           </div>
@@ -37,7 +37,7 @@ const ServersPage: React.FC = () => {
               <p className="text-lg mb-2">3. Go to the "Servers" tab.</p>
               <p className="text-lg mb-2">4. Scroll down and click on "Add Server".</p>
               <p className="text-lg mb-2">5. Enter the server name: KimDog's SMP</p>
-              <p className="text-lg mb-2">6. Enter the server address: mc.kimdog-smp.com</p>
+              <p className="text-lg mb-2">6. Enter the server address: play.kimdog-smp.com</p>
               <p className="text-lg mb-2">7. Enter the port: 19132</p>
               <p className="text-lg mb-2">8. Click "Save" and then "Join Server".</p>
             </div>
