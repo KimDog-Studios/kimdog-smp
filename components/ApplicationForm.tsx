@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
+import { TextField, Button, CircularProgress, Alert, Box, Typography, createTheme, ThemeProvider, Link } from '@mui/material';
 
 interface Field {
   id: string;
@@ -17,6 +16,22 @@ interface ApplicationFormProps {
   type: string;
 }
 
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#1a73e8',
+    },
+    background: {
+      default: '#121212',
+      paper: '#1e1e1e',
+    },
+    text: {
+      primary: '#ffffff',
+    },
+  },
+});
+
 const ApplicationForm: React.FC<ApplicationFormProps> = ({ title, fields, apiEndpoint, type }) => {
   const [formData, setFormData] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
@@ -28,78 +43,96 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({ title, fields, apiEnd
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    setSuccess(null);
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    console.log('Form data:', formData); // Log form data
 
     try {
-      const response = await fetch(apiEndpoint, {
+      setLoading(true);
+      const response = await fetch(apiEndpoint, { // Use the passed apiEndpoint
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ ...formData, type }),
+        body: JSON.stringify({ ...formData, type }), // Include type in the request body
       });
 
-      const result = await response.json();
+      const responseText = await response.text(); // Get response text for logging
+      console.log('Response status:', response.status);
+      console.log('Response text:', responseText);
 
       if (!response.ok) {
-        throw new Error(result.message || 'Failed to submit application');
+        throw new Error(`Error ${response.status}: ${responseText}`);
       }
 
-      setSuccess('Application submitted successfully');
+      const result = await response.json();
+      setSuccess(result.message);
+      setError('');
     } catch (error: any) {
       setError(error.message);
+      setSuccess('');
     } finally {
       setLoading(false);
     }
   };
 
+  const handleUUIDClick = () => {
+    const username = formData.minecraftUsername;
+    if (!username) {
+      setError('Please enter your Minecraft username first.');
+      return;
+    }
+    window.open(`https://mcuuid.net/?q=${username}`, '_blank');
+  };
+
   return (
-    <div className="w-full">
-      <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-      <h2 className="text-2xl font-bold mb-4">{title}</h2>
-      <form onSubmit={handleSubmit} className="w-full">
-        {fields.map((field) => (
-          <div key={field.id} className="mb-4">
-            <label htmlFor={field.id} className="block text-sm font-medium mb-1">
-              {field.label}
-            </label>
-            {field.type === 'textarea' ? (
-              <textarea
+    <ThemeProvider theme={darkTheme}>
+      <Box sx={{ maxWidth: 600, mx: 'auto', p: 3, border: '1px solid #333', borderRadius: 2, backgroundColor: 'background.paper' }}>
+        <Typography variant="h4" component="h2" gutterBottom>
+          {title}
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          {fields.map((field) => (
+            <Box key={field.id} mb={3}>
+              <TextField
                 id={field.id}
-                placeholder={field.placeholder}
-                required={field.required}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            ) : (
-              <input
-                id={field.id}
+                label={field.label}
                 type={field.type}
                 placeholder={field.placeholder}
                 required={field.required}
+                fullWidth
+                variant="outlined"
                 onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
+                multiline={field.type === 'textarea'}
+                rows={field.type === 'textarea' ? 4 : undefined}
+                value={formData[field.id] || ''}
               />
-            )}
-          </div>
-        ))}
-        {error && <p className="text-red-500">{error}</p>}
-        {success && <p className="text-green-500">{success}</p>}
-        <button
-          type="submit"
-          className="px-4 py-2 rounded bg-blue-500 text-white"
-          disabled={loading}
-        >
-          {loading ? 'Submitting...' : 'Submit'}
-        </button>
-      </form>
-    </div>
+              {field.id === 'uuid' && (
+                <Box mt={2}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleUUIDClick}
+                  >
+                    Get UUID
+                  </Button>
+                </Box>
+              )}
+            </Box>
+          ))}
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={loading}
+            startIcon={loading && <CircularProgress size={20} />}
+          >
+            {loading ? 'Submitting...' : 'Submit'}
+          </Button>
+        </form>
+      </Box>
+    </ThemeProvider>
   );
 };
 

@@ -1,8 +1,7 @@
-"use client";
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Navigation from '../../components/Navigation';
 
-export default function Vote() {
+const VotePage = () => {
   const [username, setUsername] = useState('');
   const [status, setStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
@@ -11,12 +10,12 @@ export default function Vote() {
     setStatus(null);
 
     try {
-      const response = await fetch('/api/vote', {
+      const response = await fetch('/api/main', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username }),
+        body: JSON.stringify({ type: 'vote', username }),
       });
 
       const result = await response.json();
@@ -64,4 +63,6 @@ export default function Vote() {
       </main>
     </div>
   );
-}
+};
+
+export default VotePage;

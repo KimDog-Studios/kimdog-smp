@@ -1,12 +1,12 @@
-'use client';
-import { useState, useEffect } from 'react';
+"use client";
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navigation from '../components/Navigation';
 import videos from '../config/videos';
 import staffMembers from '../config/staffTeam';
 import Image from 'next/image';
 
-export default function Home() {
+const HomePage = () => {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [screenshots, setScreenshots] = useState([]);
@@ -26,12 +26,12 @@ export default function Home() {
     setStatus(null);
 
     try {
-      const response = await fetch('/api/subscribe', {
+      const response = await fetch('/api/main', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ type: 'subscribe', email }),
       });
 
       const result = await response.json();
@@ -43,7 +43,7 @@ export default function Home() {
         setStatus({ type: 'error', message: result.message });
       }
     } catch (error) {
-      setStatus({ type: 'error', message: 'Failed to subscribe to the newsletter' });
+      setStatus({ type: 'error', message: 'Failed to subscribe' });
     }
   };
 
@@ -197,4 +197,6 @@ export default function Home() {
       </main>
     </div>
   );
-}
+};
+
+export default HomePage;
