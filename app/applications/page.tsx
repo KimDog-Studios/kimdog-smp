@@ -2,103 +2,79 @@
 import React, { useState } from 'react';
 import Navigation from '../../components/Navigation';
 import ApplicationForm from '../../components/ApplicationForm';
-import EditIcon from '@mui/icons-material/Edit';
 
 const ApplicationsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'whitelist' | 'admin' | 'youtube' | null>(null);
 
-  const whitelistFields = [
-    { id: 'name', label: 'Name', type: 'text', placeholder: 'Your Name', required: true },
-    { id: 'email', label: 'Email', type: 'email', placeholder: 'Your Email', required: true },
-    { id: 'minecraftUsername', label: 'Minecraft Username', type: 'text', placeholder: 'Your Minecraft Username', required: true },
-    { id: 'uuid', label: 'Minecraft UUID', type: 'text', placeholder: 'Minecraft UUID', required: true },
-    { id: 'reason', label: 'Reason for Joining', type: 'textarea', placeholder: 'Why do you want to join?', required: true },
-  ];
-
-  const adminFields = [
-    { id: 'name', label: 'Name', type: 'text', placeholder: 'Your Name', required: true },
-    { id: 'email', label: 'Email', type: 'email', placeholder: 'Your Email', required: true },
-    { id: 'minecraftUsername', label: 'Minecraft Username', type: 'text', placeholder: 'Your Minecraft Username', required: true },
-    { id: 'uuid', label: 'Minecraft UUID', type: 'text', placeholder: 'Minecraft UUID', required: true },
-    { id: 'discordName', label: 'Discord Name', type: 'text', placeholder: 'Your Discord Name', required: true },
-    { id: 'experience', label: 'Experience', type: 'textarea', placeholder: 'Describe your experience as an admin', required: true },
-    { id: 'reason', label: 'Reason for Applying', type: 'textarea', placeholder: 'Why do you want to be an admin?', required: true },
-  ];
-
-  const youtubeFields = [
-    { id: 'name', label: 'Name', type: 'text', placeholder: 'Your Name', required: true },
-    { id: 'email', label: 'Email', type: 'email', placeholder: 'Your Email', required: true },
-    { id: 'minecraftUsername', label: 'Minecraft Username', type: 'text', placeholder: 'Your Minecraft Username', required: true },
-    { id: 'uuid', label: 'Minecraft UUID', type: 'text', placeholder: 'Minecraft UUID', required: true },
-    { id: 'youtubeChannel', label: 'YouTube Channel URL', type: 'url', placeholder: 'Your YouTube Channel URL', required: true },
-    { id: 'subscribers', label: 'Number of Subscribers', type: 'number', placeholder: 'Number of Subscribers [1K Subs Required]', required: true },
-    { id: 'reason', label: 'Reason for Applying', type: 'textarea', placeholder: 'Why do you want the YouTube rank?', required: true },
-  ];
+  const fields: { [key in 'whitelist' | 'admin' | 'youtube']: { id: string; label: string; type: string; placeholder: string; required: boolean; }[] } = {
+    whitelist: [
+      { id: 'name', label: 'Name', type: 'text', placeholder: 'Enter your name', required: true },
+      { id: 'email', label: 'Email', type: 'email', placeholder: 'Enter your email', required: true },
+      { id: 'minecraftUsername', label: 'Minecraft Username', type: 'text', placeholder: 'Enter your Minecraft username', required: true },
+      { id: 'uuid', label: 'UUID', type: 'text', placeholder: 'Enter your UUID', required: true },
+      { id: 'discordName', label: 'Discord Name', type: 'text', placeholder: 'Enter your Discord name', required: true },
+      { id: 'reason', label: 'Reason', type: 'textarea', placeholder: 'Enter your reason', required: true },
+    ],
+    admin: [
+      { id: 'name', label: 'Name', type: 'text', placeholder: 'Enter your name', required: true },
+      { id: 'email', label: 'Email', type: 'email', placeholder: 'Enter your email', required: true },
+      { id: 'minecraftUsername', label: 'Minecraft Username', type: 'text', placeholder: 'Enter your Minecraft username', required: true },
+      { id: 'discordName', label: 'Discord Name', type: 'text', placeholder: 'Enter your Discord name', required: true },
+      { id: 'experience', label: 'Experience', type: 'textarea', placeholder: 'Enter your experience', required: true },
+      { id: 'reason', label: 'Reason', type: 'textarea', placeholder: 'Enter your reason', required: true },
+    ],
+    youtube: [
+      { id: 'name', label: 'Name', type: 'text', placeholder: 'Enter your name', required: true },
+      { id: 'email', label: 'Email', type: 'email', placeholder: 'Enter your email', required: true },
+      { id: 'minecraftUsername', label: 'Minecraft Username', type: 'text', placeholder: 'Enter your Minecraft username', required: true },
+      { id: 'uuid', label: 'UUID', type: 'text', placeholder: 'Enter your UUID', required: true },
+      { id: 'youtubeChannel', label: 'YouTube Channel', type: 'text', placeholder: 'Enter your YouTube channel', required: true },
+      { id: 'subscribers', label: 'Subscribers', type: 'number', placeholder: 'Enter your subscriber count', required: true },
+      { id: 'reason', label: 'Reason', type: 'textarea', placeholder: 'Enter your reason', required: true },
+    ],
+  };
 
   return (
-    <div className="bg-gray-900 text-white min-h-screen font-minecraft flex flex-col">
+    <div className="min-h-screen bg-gray-900 text-white">
       <Navigation />
-      <main className="flex flex-col items-center justify-center flex-grow px-4 py-20">
-        <header className="text-center mb-12">
-          <h1 className="text-5xl mb-4">Applications</h1>
-          <p className="text-xl">Please fill out the form below to apply for the whitelist, admin position, or YouTube rank.</p>
-        </header>
-        {activeTab === null ? (
-          <div className="flex justify-center mb-8">
-            <button
-              className="px-4 py-2 mx-2 rounded bg-blue-500 text-white"
-              onClick={() => setActiveTab('whitelist')}
-            >
-              Whitelist Application
-            </button>
-            <button
-              className="px-4 py-2 mx-2 rounded bg-blue-500 text-white"
-              onClick={() => setActiveTab('admin')}
-            >
-              Admin Application
-            </button>
-            <button
-              className="px-4 py-2 mx-2 rounded bg-red-500 text-white"
-              onClick={() => setActiveTab('youtube')}
-            >
-              YouTube Rank Application
-            </button>
-          </div>
-        ) : (
-          <div className="flex flex-wrap justify-center gap-8 w-full max-w-6xl">
-            {activeTab === 'whitelist' && (
-              <div className="w-full md:w-1/2 flex flex-col items-center">
-                <ApplicationForm title="Whitelist Application" fields={whitelistFields} apiEndpoint="/api/application" type="whitelist" />
-                <button
-                  className="mt-4 px-4 py-2 rounded bg-blue-500 text-white"
-                  onClick={() => setActiveTab(null)}
-                >
-                  Go Back
-                </button>
-              </div>
-            )}
-            {activeTab === 'admin' && (
-              <div className="w-full md:w-1/2 flex flex-col items-center">
-                <ApplicationForm title="Admin Application" fields={adminFields} apiEndpoint="/api/application" type="admin" />
-                <button
-                  className="mt-4 px-4 py-2 rounded bg-blue-500 text-white"
-                  onClick={() => setActiveTab(null)}
-                >
-                  Go Back
-                </button>
-              </div>
-            )}
-            {activeTab === 'youtube' && (
-              <div className="w-full md:w-1/2 flex flex-col items-center">
-                <ApplicationForm title="YouTube Rank Application" fields={youtubeFields} apiEndpoint="/api/youtube_rank" type="youtube" />
-                <button
-                  className="mt-4 px-4 py-2 rounded bg-blue-500 text-white"
-                  onClick={() => setActiveTab(null)}
-                >
-                  Go Back
-                </button>
-              </div>
-            )}
+      <main className="container mx-auto py-8">
+        <h1 className="text-3xl font-bold text-center mb-8">Applications</h1>
+        <div className="flex justify-center mb-8">
+          <button
+            className="mx-2 px-4 py-2 rounded bg-blue-500 text-white"
+            onClick={() => setActiveTab('whitelist')}
+          >
+            Whitelist Application
+          </button>
+          <button
+            className="mx-2 px-4 py-2 rounded bg-blue-500 text-white"
+            onClick={() => setActiveTab('admin')}
+          >
+            Admin Application
+          </button>
+          <button
+            className="mx-2 px-4 py-2 rounded bg-blue-500 text-white"
+            onClick={() => setActiveTab('youtube')}
+          >
+            YouTube Rank Application
+          </button>
+        </div>
+        {activeTab && (
+          <div className="flex justify-center">
+            <div className="w-full md:w-1/2 flex flex-col items-center">
+              <ApplicationForm
+                title={`${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Application`}
+                fields={fields[activeTab]}
+                apiEndpoint="/api/main"
+                type={activeTab}
+              />
+              <button
+                className="mt-4 px-4 py-2 rounded bg-blue-500 text-white"
+                onClick={() => setActiveTab(null)}
+              >
+                Go Back
+              </button>
+            </div>
           </div>
         )}
       </main>

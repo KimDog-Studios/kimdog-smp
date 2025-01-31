@@ -1,27 +1,39 @@
-'use client';
 import React, { useState } from 'react';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+
+interface Field {
+  id: string;
+  label: string;
+  type: string;
+  placeholder: string;
+  required: boolean;
+}
 
 interface ApplicationFormProps {
   title: string;
-  fields: { id: string; label: string; type: string; placeholder: string; required: boolean }[];
+  fields: Field[];
   apiEndpoint: string;
   type: string;
 }
 
 const ApplicationForm: React.FC<ApplicationFormProps> = ({ title, fields, apiEndpoint, type }) => {
   const [formData, setFormData] = useState<{ [key: string]: string }>({});
-  const [status, setStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [id]: value }));
+    setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus(null);
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+
     try {
       const response = await fetch(apiEndpoint, {
         method: 'POST',
@@ -30,70 +42,64 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({ title, fields, apiEnd
         },
         body: JSON.stringify({ ...formData, type }),
       });
+
       const result = await response.json();
-      if (response.ok) {
-        setStatus({ type: 'success', message: result.message });
-        setFormData({});
-      } else {
-        setStatus({ type: 'error', message: result.message });
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Failed to submit application');
       }
-    } catch (error) {
-      setStatus({ type: 'error', message: 'Failed to send application.' });
+
+      setSuccess('Application submitted successfully');
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <section className="w-full max-w-md">
-      <h2 className="text-3xl mb-4">{title}</h2>
-      <form onSubmit={handleSubmit}>
-        {fields && fields.map((field) => (
-          <div key={field.id} className="mb-6">
+    <div className="w-full">
+      <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <h2 className="text-2xl font-bold mb-4">{title}</h2>
+      <form onSubmit={handleSubmit} className="w-full">
+        {fields.map((field) => (
+          <div key={field.id} className="mb-4">
+            <label htmlFor={field.id} className="block text-sm font-medium mb-1">
+              {field.label}
+            </label>
             {field.type === 'textarea' ? (
               <textarea
                 id={field.id}
-                value={formData[field.id] || ''}
-                onChange={handleChange}
-                className="w-full p-4 text-lg rounded bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
                 placeholder={field.placeholder}
                 required={field.required}
-                rows={5} // Adjust the number of rows for the textarea
+                onChange={handleChange}
+                className="w-full p-2 border border-gray-300 rounded"
               />
             ) : (
               <input
-                type={field.type}
                 id={field.id}
-                value={formData[field.id] || ''}
-                onChange={handleChange}
-                className="w-full p-4 text-lg rounded bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+                type={field.type}
                 placeholder={field.placeholder}
                 required={field.required}
+                onChange={handleChange}
+                className="w-full p-2 border border-gray-300 rounded"
               />
             )}
           </div>
         ))}
+        {error && <p className="text-red-500">{error}</p>}
+        {success && <p className="text-green-500">{success}</p>}
         <button
           type="submit"
-          className="bg-green-500 hover:bg-green-700 text-white py-3 px-6 rounded transition duration-300 transform hover:scale-105 text-lg"
+          className="px-4 py-2 rounded bg-blue-500 text-white"
+          disabled={loading}
         >
-          Submit
+          {loading ? 'Submitting...' : 'Submit'}
         </button>
-        <button
-          type="button"
-          onClick={() => window.open('https://mcuuid.net/', '_blank')}
-          className="bg-blue-500 hover:bg-blue-700 text-white py-3 px-6 rounded transition duration-300 transform hover:scale-105 text-lg ml-4"
-        >
-          Get UUID
-        </button>
-        {status && (
-          <div className="mt-4">
-            <Alert severity={status.type}>
-              <AlertTitle>{status.type === 'success' ? 'Success' : 'Error'}</AlertTitle>
-              {status.message}
-            </Alert>
-          </div>
-        )}
       </form>
-    </section>
+    </div>
   );
 };
 

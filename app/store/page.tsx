@@ -1,15 +1,15 @@
 "use client";
 import React, { useState } from 'react';
 import Navigation from '../../components/Navigation';
-import { Container, Grid, Card, CardContent, Typography, Button, TextField, IconButton, Badge, Box, AppBar, Toolbar, Drawer, List, ListItem, ListItemText, ListItemSecondaryAction, Dialog, DialogTitle, DialogContent, DialogActions, Checkbox, FormControlLabel, Slider } from '@mui/material';
-import { ShoppingCart } from '@mui/icons-material';
+import { Container, Grid, Card, CardContent, Typography, Button, TextField, IconButton, Badge, Box, AppBar, Toolbar, Drawer, List, ListItem, ListItemText, ListItemSecondaryAction, Dialog, DialogTitle, DialogContent, DialogActions, Checkbox, FormControlLabel, Slider, ListItemAvatar, Avatar, IconButton as MuiIconButton } from '@mui/material';
+import { ShoppingCart, Add, Remove } from '@mui/icons-material';
 import { products } from '../../config/store';
 
 const StorePage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<number[]>([0, 10]);
-  const [cart, setCart] = useState<{ id: number; name: string; price: number }[]>([]);
+  const [cart, setCart] = useState<{ id: number; name: string; price: number; image: string; quantity: number }[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<{ id: number; name: string; description: string; detailedDescription: string; price: number; image: string } | null>(null);
 
@@ -27,13 +27,26 @@ const StorePage: React.FC = () => {
     setPriceRange(newValue as number[]);
   };
 
-  const addToCart = (product: { id: number; name: string; price: number }) => {
-    setCart([...cart, product]);
+  const addToCart = (product: { id: number; name: string; price: number; image: string }) => {
+    const existingProduct = cart.find(item => item.id === product.id);
+    if (existingProduct) {
+      setCart(cart.map(item => item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item));
+    } else {
+      setCart([...cart, { ...product, quantity: 1 }]);
+    }
     setSelectedProduct(null); // Close the dialog after adding to cart
   };
 
   const removeFromCart = (productId: number) => {
     setCart(cart.filter(product => product.id !== productId));
+  };
+
+  const increaseQuantity = (productId: number) => {
+    setCart(cart.map(item => item.id === productId ? { ...item, quantity: item.quantity + 1 } : item));
+  };
+
+  const decreaseQuantity = (productId: number) => {
+    setCart(cart.map(item => item.id === productId && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item));
   };
 
   const filteredProducts = products.filter(product => {
@@ -44,7 +57,7 @@ const StorePage: React.FC = () => {
     );
   });
 
-  const total = cart.reduce((acc, product) => acc + product.price, 0);
+  const total = cart.reduce((acc, product) => acc + product.price * product.quantity, 0);
 
   const toggleCart = () => {
     setIsCartOpen(!isCartOpen);
@@ -84,8 +97,28 @@ const StorePage: React.FC = () => {
             ) : (
               <List>
                 {cart.map(product => (
-                  <ListItem key={product.id}>
-                    <ListItemText primary={product.name} secondary={`$${product.price.toFixed(2)}`} />
+                  <ListItem key={product.id} alignItems="flex-start">
+                    <ListItemAvatar>
+                      <Avatar src={product.image} alt={product.name} />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={product.name}
+                      secondary={
+                        <>
+                          <Typography component="span" variant="body2" color="textPrimary">
+                            ${product.price.toFixed(2)} x {product.quantity} = ${(product.price * product.quantity).toFixed(2)}
+                          </Typography>
+                          <div>
+                            <MuiIconButton size="small" onClick={() => decreaseQuantity(product.id)}>
+                              <Remove />
+                            </MuiIconButton>
+                            <MuiIconButton size="small" onClick={() => increaseQuantity(product.id)}>
+                              <Add />
+                            </MuiIconButton>
+                          </div>
+                        </>
+                      }
+                    />
                     <ListItemSecondaryAction>
                       <Button onClick={() => removeFromCart(product.id)} variant="contained" color="secondary" size="small">Remove</Button>
                     </ListItemSecondaryAction>
@@ -147,9 +180,10 @@ const StorePage: React.FC = () => {
             <Grid container spacing={3}>
               {filteredProducts.map(product => (
                 <Grid item xs={12} sm={6} md={4} key={product.id}>
-                  <Card style={{ backgroundColor: '#424242', color: 'white' }}>
-                    <CardContent>
-                      <img src={product.image} alt={product.name} style={{ width: '100%', height: 'auto', marginBottom: '10px' }} />
+                  <Card className="transition-transform transform hover:scale-105 hover:shadow-lg" style={{ backgroundColor: '#424242', color: 'white' }}>
+                    <CardContent className="relative">
+                      <div className="absolute inset-0 border-2 border-transparent hover:border-blue-500 hover:animate-pulse"></div>
+                      <img src={product.image} alt={product.name} className="w-full h-auto mb-2" />
                       <Typography variant="h5" component="div" gutterBottom>
                         {product.name}
                       </Typography>
@@ -171,7 +205,7 @@ const StorePage: React.FC = () => {
           <Dialog open={Boolean(selectedProduct)} onClose={handleCloseDialog}>
             <DialogTitle>{selectedProduct.name}</DialogTitle>
             <DialogContent>
-              <img src={selectedProduct.image} alt={selectedProduct.name} style={{ width: '100%', marginBottom: '20px' }} />
+              <img src={selectedProduct.image} alt={selectedProduct.name} className="w-full mb-4" />
               <Typography variant="body1" gutterBottom>
                 {selectedProduct.detailedDescription}
               </Typography>
