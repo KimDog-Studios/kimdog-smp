@@ -62,10 +62,12 @@ const generateUserEmailHtml = (name: string, type: string) => `
       <img src="https://raw.githubusercontent.com/KimDog-Studios/kimdog-smp/main/public/assets/Logo.png" alt="KimDog SMP Logo" style="max-width: 150px;">
     </div>
     <h2 style="color: #333; text-align: center;">${
-      type === 'subscribe' ? 'Subscription Confirmation' : 'Application Received'
+      type === 'subscribe' ? 'Subscription Confirmation' : `Application Received for ${type}`
     }</h2>
     <p>Hello ${name},</p>
-    <p>Thank you for ${type === 'subscribe' ? 'subscribing to' : 'applying for'} the KimDog SMP! We will review your request and contact you soon.</p>
+    <p>Thank you for ${
+      type === 'subscribe' ? 'subscribing to' : `applying for the ${type} on`
+    } the KimDog SMP! We will review your request and contact you soon.</p>
     <p>Visit our website: <a href="https://kimdog-smp.com" style="color: #1a73e8;">kimdog-smp.com</a></p>
     <p>Best regards,<br/>The KimDog SMP Team</p>
   </div>
