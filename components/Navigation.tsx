@@ -44,9 +44,9 @@ const Navigation: React.FC = () => {
           Home
         </Link>
       </Button>
-      <Button color="inherit" onClick={handleMenuClick}>
-        <Link href="/applications" className="text-white no-underline hover:text-gray-400 transition-colors duration-300">
-          Applications  
+      <Button color="inherit">
+        <Link href="/store" className="text-white no-underline hover:text-gray-400 transition-colors duration-300">
+          Store
         </Link>
       </Button>
       <Button color="inherit">
@@ -54,19 +54,14 @@ const Navigation: React.FC = () => {
           Servers
         </Link>
       </Button>
+      <Button color="inherit" onClick={handleMenuClick}>
+        <Link href="/applications" className="text-white no-underline hover:text-gray-400 transition-colors duration-300">
+          Applications  
+        </Link>
+      </Button>
       <Button color="inherit">
         <Link href="/contact" className="text-white no-underline hover:text-gray-400 transition-colors duration-300">
           Contact
-        </Link>
-      </Button>
-      <Button color="inherit">
-        <Link href="/auth?mode=login" className="text-white no-underline hover:text-gray-400 transition-colors duration-300">
-          Login
-        </Link>
-      </Button>
-      <Button color="inherit">
-        <Link href="/auth?mode=signup" className="text-white no-underline hover:text-gray-400 transition-colors duration-300">
-          Sign Up
         </Link>
       </Button>
     </>
